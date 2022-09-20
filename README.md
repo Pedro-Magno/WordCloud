@@ -1,2 +1,2 @@
 # WordCloud
- Program to create wordclouds out of txt archives
+ Program to create a wordcloud out of a web link
