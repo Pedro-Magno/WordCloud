@@ -2,6 +2,8 @@ import urllib.request
 from bs4 import BeautifulSoup
 import re
 from collections import Counter
+import ast
+import csv
 
 #Determina a página selecionada, segunda linha finge ser um browser normal, muitas páginas não aceitam abrir sem um browser
 page = urllib.request.Request("https://en.wikipedia.org/wiki/Computer_science")
@@ -21,14 +23,17 @@ for x in page.find_all("div", class_="mw-parser-output"):
     list.append(" ")
 
 
-#Formatação do conteúdo da página, remoção de caracteres não letras e separação por espaços das palavras
+#Formatação do conteúdo da página, remoção de caracteres não letras e separação por espaços das palavras, transforma em um dicionário
 final_string = "".join(list)
 final_string = final_string.upper()
 final_string = re.sub(r'[^a-zA-Z\s]', '', final_string)
 final_list = final_string.split()
-final_dictionary = Counter(final_list)
+final_dictionary = str(Counter(final_list))
+final_dictionary = final_dictionary.removesuffix(")").removeprefix("Counter(").strip()
+final_dictionary =  ast.literal_eval(final_dictionary)
 
-https://www.wordexample.com/list/most-common-words-1k#google_vignette
-print(Counter(final_list))
-
+#Transforma o Dicionário em um arquivo csv
+Dataframe = open('Dataframe.csv', 'w')
+for key in final_dictionary.keys():
+    Dataframe.write("%s, %s\n" % (key, final_dictionary[key]))
 
